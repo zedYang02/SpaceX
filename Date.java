@@ -1,34 +1,34 @@
-package launch;
+package spacex;
 
 import utility.Comparable;
 
 public class Date implements Comparable<Date>{
 
-	private int day;
-	private int month;
-	private int year;
+	private int   day;
+	private Month month;
+	private int   year;
 	
 	public Date() {
-		this(0,0,0);
+		this(0,Month.JAN,0);
 	}
 	
 	public Date(String date) {
-		String[] str = date.split("/");
-		month = Integer.parseInt(str[0]);
-		day = Integer.parseInt(str[1]);
-		year = Integer.parseInt(str[0]);
+		String[] str = date.split("-");
+		day   = Integer.parseInt(str[0]);
+		month = Month.valueOf(str[1].toUpperCase());
+		year  = Integer.parseInt(str[2]);
 	}
 
-	public Date(int day, int month, int year) {
+	public Date(int day, Month month, int year) {
 		
-		this.day = day;
+		this.day   = day;
 		this.month = month;
-		this.year = year;
+		this.year  = year;
 	}
 	
 	public int compareTo(Date other) {
-		if(month != other.month)
-			return month - other.month;
+		if(!month.equals(other.month))
+			return month.compareTo(other.month);
 		else if(day != other.day)
 			return day - other.day;
 		else
@@ -37,16 +37,19 @@ public class Date implements Comparable<Date>{
 	public boolean equals(Object obj) {
 		if(obj instanceof Date){
 			Date other = (Date)obj;
-			return month == other.month &&
-					day == other.day &&
-					year == other.year;
+			return month.equals(other.month) &&
+				   day  == other.day &&
+				   year == other.year;
 		}
 		return false;
 	}
+	
+	public String toCSVFormat() {
+		return String.format("%d-%s-%02d", day,month,year);
+	}
 
 	public String toString() {
-		String date = String.format("%s/%s/%s",month,day,year);
-		return date.equals("0/0/0")? "" : date;
+		String date = String.format("%d-%s-%02d",day,month,year);
+		return date.equals("0-Jan-0") ? "" : date;
 	}
-	
 }
